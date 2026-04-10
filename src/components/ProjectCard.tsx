@@ -34,15 +34,19 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
     const trimmedComment = comment.trim();
     if (trimmedComment.length > 1000) { toast.error("Comment too long"); return; }
 
-    await addRating.mutateAsync({
-      project_id: project.id,
-      rating,
-      user_id: userId,
-      reviewer_name: "User",
-      comment: trimmedComment || null,
-    });
-    setRating(0); setComment(""); setShowForm(false);
-    toast.success("Rating submitted!");
+    try {
+      await addRating.mutateAsync({
+        project_id: project.id,
+        rating,
+        user_id: userId,
+        reviewer_name: "User",
+        comment: trimmedComment || null,
+      });
+      setRating(0); setComment(""); setShowForm(false);
+      toast.success("Rating submitted!");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to submit rating");
+    }
   };
 
   return (
