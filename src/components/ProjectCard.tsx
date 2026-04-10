@@ -1,43 +1,47 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { StarRating } from "@/components/StarRating";
 import { RatingDistribution } from "@/components/RatingDistribution";
 import { useProjectRatings, useAddRating } from "@/hooks/useProjects";
 import type { Project } from "@/hooks/useProjects";
-import { MessageSquare, Send, Trash2 } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
 import { toast } from "sonner";
 
 interface Props {
   project: Project;
   isAdmin?: boolean;
+  userId?: string;
+  onLogin?: () => void;
   onDelete?: () => void;
 }
 
-export function ProjectCard({ project, isAdmin, onDelete }: Props) {
+export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Props) {
   const { data: ratings = [] } = useProjectRatings(project.id);
   const addRating = useAddRating();
   const [rating, setRating] = useState(0);
-  const [name, setName] = useState("");
   const [comment, setComment] = useState("");
   const [showForm, setShowForm] = useState(false);
 
+  const userExistingRating = userId
+    ? ratings.find((r) => r.user_id === userId)
+    : null;
+
   const handleSubmit = async () => {
+    if (!userId) { onLogin?.(); return; }
     if (rating === 0) { toast.error("Please select a rating"); return; }
-    const trimmedName = name.trim();
-    if (trimmedName.length > 100) { toast.error("Name too long"); return; }
     const trimmedComment = comment.trim();
     if (trimmedComment.length > 1000) { toast.error("Comment too long"); return; }
 
     await addRating.mutateAsync({
       project_id: project.id,
       rating,
-      reviewer_name: trimmedName || "Anonymous",
+      user_id: userId,
+      reviewer_name: "User",
       comment: trimmedComment || null,
     });
-    setRating(0); setName(""); setComment(""); setShowForm(false);
+    setRating(0); setComment(""); setShowForm(false);
     toast.success("Rating submitted!");
   };
 
@@ -65,20 +69,23 @@ export function ProjectCard({ project, isAdmin, onDelete }: Props) {
 
       <RatingDistribution ratings={ratings} />
 
-      {!showForm ? (
-        <Button variant="outline" size="sm" onClick={() => setShowForm(true)} className="gap-2">
-          <MessageSquare size={14} /> Rate this project
-        </Button>
+      {userExistingRating ? (
+        <div className="text-xs text-muted-foreground p-2 rounded bg-secondary/30">
+          You rated this project <StarRating value={userExistingRating.rating} readonly size={12} />
+        </div>
+      ) : !showForm ? (
+        userId ? (
+          <Button variant="outline" size="sm" onClick={() => setShowForm(true)} className="gap-2">
+            <MessageSquare size={14} /> Rate this project
+          </Button>
+        ) : (
+          <Button variant="outline" size="sm" onClick={onLogin} className="gap-2">
+            <LogIn size={14} /> Sign in to rate
+          </Button>
+        )
       ) : (
         <div className="space-y-3 p-4 rounded-lg bg-secondary/50">
           <StarRating value={rating} onChange={setRating} size={24} />
-          <Input
-            placeholder="Your name (optional)"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={100}
-            className="bg-background"
-          />
           <Textarea
             placeholder="Write a comment (optional)"
             value={comment}
@@ -98,7 +105,7 @@ export function ProjectCard({ project, isAdmin, onDelete }: Props) {
 
       {ratings.length > 0 && (
         <div className="space-y-2 max-h-48 overflow-y-auto">
-          <p className="text-xs font-medium text-muted-foreground">Recent Reviews</p>
+          <p className="text-xs font-medium text-muted-foreground">Recent Reviews ({ratings.length})</p>
           {ratings.slice(0, 5).map((r) => (
             <div key={r.id} className="text-xs p-2 rounded bg-secondary/30 space-y-1">
               <div className="flex items-center justify-between">
