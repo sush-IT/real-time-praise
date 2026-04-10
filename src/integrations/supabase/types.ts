@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           created_at: string
@@ -52,6 +76,7 @@ export type Database = {
           project_id: string
           rating: number
           reviewer_name: string
+          user_id: string | null
         }
         Insert: {
           comment?: string | null
@@ -60,6 +85,7 @@ export type Database = {
           project_id: string
           rating: number
           reviewer_name?: string
+          user_id?: string | null
         }
         Update: {
           comment?: string | null
@@ -68,6 +94,7 @@ export type Database = {
           project_id?: string
           rating?: number
           reviewer_name?: string
+          user_id?: string | null
         }
         Relationships: [
           {
