@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
-import type { Tables, TablesInsert } from "@/integrations/supabase/types";
+import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 
 export type Project = Tables<"projects">;
 export type Rating = Tables<"ratings">;
@@ -86,6 +86,19 @@ export function useAddProject() {
   return useMutation({
     mutationFn: async (project: TablesInsert<"projects">) => {
       const { error } = await supabase.from("projects").insert(project);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+}
+
+export function useUpdateProject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: TablesUpdate<"projects"> & { id: string }) => {
+      const { error } = await supabase.from("projects").update(updates).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
