@@ -71,6 +71,17 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
         ))}
       </div>
 
+      {project.team_members && project.team_members.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 items-center">
+          <Users size={14} className="text-muted-foreground" />
+          {project.team_members.map((member) => (
+            <Badge key={member} variant="outline" className="text-xs">
+              {member}
+            </Badge>
+          ))}
+        </div>
+      )}
+
       <RatingDistribution ratings={ratings} />
 
       {userExistingRating ? (
