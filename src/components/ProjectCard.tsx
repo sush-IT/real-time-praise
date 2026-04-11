@@ -21,7 +21,7 @@ interface Props {
 export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Props) {
   const { data: ratings = [] } = useProjectRatings(project.id);
   const addRating = useAddRating();
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(-1);
   const [comment, setComment] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -32,7 +32,7 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
 
   const handleSubmit = async () => {
     if (!userId) { onLogin?.(); return; }
-    if (rating === 0) { toast.error("Please select a rating"); return; }
+    if (rating < 0) { toast.error("Please select a rating"); return; }
     const trimmedComment = comment.trim();
     if (trimmedComment.length > 1000) { toast.error("Comment too long"); return; }
 
@@ -44,7 +44,7 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
         reviewer_name: "User",
         comment: trimmedComment || null,
       });
-      setRating(0); setComment(""); setShowForm(false);
+      setRating(-1); setComment(""); setShowForm(false);
       toast.success("Rating submitted!");
     } catch (err: any) {
       toast.error(err?.message || "Failed to submit rating");
