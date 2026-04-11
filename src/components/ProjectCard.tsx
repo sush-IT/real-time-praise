@@ -32,7 +32,7 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
 
   const handleSubmit = async () => {
     if (!userId) { onLogin?.(); return; }
-    if (rating === 0) { toast.error("Please select a rating"); return; }
+    if (rating < 0) { toast.error("Please select a rating"); return; }
     const trimmedComment = comment.trim();
     if (trimmedComment.length > 1000) { toast.error("Comment too long"); return; }
 
