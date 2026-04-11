@@ -6,7 +6,7 @@ import { StarRating } from "@/components/StarRating";
 import { RatingDistribution } from "@/components/RatingDistribution";
 import { useProjectRatings, useAddRating } from "@/hooks/useProjects";
 import type { Project } from "@/hooks/useProjects";
-import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn, Users } from "lucide-react";
 import { toast } from "sonner";
 
 interface Props {
@@ -70,6 +70,17 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
           </Badge>
         ))}
       </div>
+
+      {project.team_members && project.team_members.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 items-center">
+          <Users size={14} className="text-muted-foreground" />
+          {project.team_members.map((member) => (
+            <Badge key={member} variant="outline" className="text-xs">
+              {member}
+            </Badge>
+          ))}
+        </div>
+      )}
 
       <RatingDistribution ratings={ratings} />
 

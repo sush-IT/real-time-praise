@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAddProject } from "@/hooks/useProjects";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
@@ -12,6 +12,8 @@ export function AddProjectForm({ onClose }: { onClose: () => void }) {
   const [description, setDescription] = useState("");
   const [techInput, setTechInput] = useState("");
   const [technologies, setTechnologies] = useState<string[]>([]);
+  const [memberInput, setMemberInput] = useState("");
+  const [teamMembers, setTeamMembers] = useState<string[]>([]);
   const addProject = useAddProject();
 
   const addTech = () => {
@@ -19,6 +21,14 @@ export function AddProjectForm({ onClose }: { onClose: () => void }) {
     if (t && !technologies.includes(t) && technologies.length < 20) {
       setTechnologies([...technologies, t]);
       setTechInput("");
+    }
+  };
+
+  const addMember = () => {
+    const m = memberInput.trim();
+    if (m && !teamMembers.includes(m) && teamMembers.length < 20) {
+      setTeamMembers([...teamMembers, m]);
+      setMemberInput("");
     }
   };
 
@@ -31,6 +41,7 @@ export function AddProjectForm({ onClose }: { onClose: () => void }) {
       title: title.trim(),
       description: description.trim(),
       technologies,
+      team_members: teamMembers,
     });
     toast.success("Project added!");
     onClose();
@@ -59,6 +70,26 @@ export function AddProjectForm({ onClose }: { onClose: () => void }) {
           </Badge>
         ))}
       </div>
+
+      <div className="flex gap-2">
+        <Input
+          placeholder="Add team member"
+          value={memberInput}
+          onChange={(e) => setMemberInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addMember())}
+          maxLength={100}
+          className="bg-background"
+        />
+        <Button size="icon" variant="outline" onClick={addMember}><Users size={16} /></Button>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {teamMembers.map((m) => (
+          <Badge key={m} variant="outline" className="gap-1 cursor-pointer" onClick={() => setTeamMembers(teamMembers.filter((x) => x !== m))}>
+            {m} <X size={12} />
+          </Badge>
+        ))}
+      </div>
+
       <div className="flex gap-2">
         <Button onClick={handleSubmit} disabled={addProject.isPending}>Add Project</Button>
         <Button variant="ghost" onClick={onClose}>Cancel</Button>

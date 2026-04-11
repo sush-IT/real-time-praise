@@ -1,0 +1,1 @@
+ALTER TABLE public.projects ADD COLUMN team_members text[] NOT NULL DEFAULT '{}'::text[];

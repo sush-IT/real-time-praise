@@ -44,6 +44,7 @@ export type Database = {
           description: string
           id: string
           is_published: boolean
+          team_members: string[]
           technologies: string[]
           title: string
           updated_at: string
@@ -53,6 +54,7 @@ export type Database = {
           description: string
           id?: string
           is_published?: boolean
+          team_members?: string[]
           technologies?: string[]
           title: string
           updated_at?: string
@@ -62,6 +64,7 @@ export type Database = {
           description?: string
           id?: string
           is_published?: boolean
+          team_members?: string[]
           technologies?: string[]
           title?: string
           updated_at?: string
