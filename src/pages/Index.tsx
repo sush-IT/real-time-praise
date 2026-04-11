@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ProjectCard } from "@/components/ProjectCard";
 import { AddProjectForm } from "@/components/AddProjectForm";
 import { AuthDialog } from "@/components/AuthDialog";
+import { RatingCriteria } from "@/components/RatingCriteria";
 import { useProjects, useDeleteProject } from "@/hooks/useProjects";
 import { useAuth } from "@/hooks/useAuth";
 import { Plus, LogIn, LogOut, BarChart3, User } from "lucide-react";
+import collegeBanner from "@/assets/college-banner.png";
 
 const Index = () => {
   const { data: projects = [], isLoading } = useProjects();
@@ -16,6 +18,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* College Banner */}
+      <div className="w-full bg-background">
+        <img src={collegeBanner} alt="Karmaveer Adv. Baburao Ganpatrao Thakare College of Engineering, Nashik" className="w-full h-auto object-contain" />
+      </div>
+
       <header className="border-b border-border sticky top-0 z-50 glass">
         <div className="container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -84,6 +91,9 @@ const Index = () => {
             ))}
           </div>
         )}
+
+        {/* Rating Criteria at Bottom */}
+        <RatingCriteria />
       </main>
 
       <AuthDialog open={showAuth} onOpenChange={setShowAuth} />
