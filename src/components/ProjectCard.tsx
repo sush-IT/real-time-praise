@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { StarRating } from "@/components/StarRating";
 import { RatingDistribution } from "@/components/RatingDistribution";
+import { EditProjectForm } from "@/components/EditProjectForm";
 import { useProjectRatings, useAddRating } from "@/hooks/useProjects";
 import type { Project } from "@/hooks/useProjects";
-import { MessageSquare, Send, Trash2, LogIn, Users } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn, Users, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 interface Props {
@@ -23,6 +24,7 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const userExistingRating = userId
     ? ratings.find((r) => r.user_id === userId)
@@ -56,12 +58,23 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
           <h3 className="text-xl font-semibold text-foreground">{project.title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">{project.description}</p>
         </div>
-        {isAdmin && onDelete && (
-          <Button variant="ghost" size="icon" onClick={onDelete} className="text-destructive hover:text-destructive">
-            <Trash2 size={16} />
-          </Button>
+        {isAdmin && (
+          <div className="flex gap-1">
+            <Button variant="ghost" size="icon" onClick={() => setShowEdit(!showEdit)} className="text-muted-foreground hover:text-foreground">
+              <Pencil size={16} />
+            </Button>
+            {onDelete && (
+              <Button variant="ghost" size="icon" onClick={onDelete} className="text-destructive hover:text-destructive">
+                <Trash2 size={16} />
+              </Button>
+            )}
+          </div>
         )}
       </div>
+
+      {showEdit && isAdmin && (
+        <EditProjectForm project={project} onClose={() => setShowEdit(false)} />
+      )}
 
       <div className="flex flex-wrap gap-1.5">
         {project.technologies.map((tech) => (
