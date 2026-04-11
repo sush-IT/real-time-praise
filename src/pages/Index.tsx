@@ -6,8 +6,8 @@ import { AuthDialog } from "@/components/AuthDialog";
 import { RatingCriteria } from "@/components/RatingCriteria";
 import { useProjects, useDeleteProject } from "@/hooks/useProjects";
 import { useAuth } from "@/hooks/useAuth";
-import { Plus, LogIn, LogOut, BarChart3, User } from "lucide-react";
-
+import { Plus, LogIn, LogOut, User } from "lucide-react";
+import kbtcoeLogo from "@/assets/kbtcoe-logo.png";
 
 const Index = () => {
   const { data: projects = [], isLoading } = useProjects();
@@ -22,8 +22,8 @@ const Index = () => {
       <header className="border-b border-border sticky top-0 z-50 glass">
         <div className="container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <BarChart3 className="text-primary" size={28} />
-            <h1 className="text-xl font-bold gradient-text">ProjectRate</h1>
+            <img src={kbtcoeLogo} alt="KBTCOE Logo" className="w-9 h-9 rounded-full object-cover" />
+            <h1 className="text-lg font-bold gradient-text">KBTCOE PROJECT REVIEW SYSTEM</h1>
           </div>
           <div className="flex items-center gap-2">
             {isAdmin && (
