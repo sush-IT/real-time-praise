@@ -6,7 +6,7 @@ import { StarRating } from "@/components/StarRating";
 import { RatingDistribution } from "@/components/RatingDistribution";
 import { useProjectRatings, useAddRating } from "@/hooks/useProjects";
 import type { Project } from "@/hooks/useProjects";
-import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn, Users } from "lucide-react";
 import { toast } from "sonner";
 
 interface Props {
