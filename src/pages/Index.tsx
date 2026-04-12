@@ -52,7 +52,8 @@ const Index = () => {
 
       <main className="container max-w-6xl mx-auto px-4 py-8 space-y-6">
         <div className="text-center space-y-2 py-8">
-          <h2 className="text-4xl font-bold gradient-text">Rate & Review Projects</h2>
+          <h2 className="text-4xl font-bold gradient-text">B.E. Information Technology Final Year Project</h2>
+          <p className="text-lg font-medium text-foreground">Academic Year 2025-26</p>
           <p className="text-muted-foreground max-w-lg mx-auto">
             Real-time project reviews with live analytics. Sign in to rate projects and see how others feel — instantly.
           </p>
@@ -81,6 +82,7 @@ const Index = () => {
                 project={project}
                 isAdmin={isAdmin}
                 userId={user?.id}
+                userName={user?.user_metadata?.full_name || user?.email?.split("@")[0]}
                 onLogin={() => setShowAuth(true)}
                 onDelete={() => deleteProject.mutate(project.id)}
               />
