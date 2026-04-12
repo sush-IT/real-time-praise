@@ -14,11 +14,12 @@ interface Props {
   project: Project;
   isAdmin?: boolean;
   userId?: string;
+  userName?: string;
   onLogin?: () => void;
   onDelete?: () => void;
 }
 
-export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Props) {
+export function ProjectCard({ project, isAdmin, userId, userName, onLogin, onDelete }: Props) {
   const { data: ratings = [] } = useProjectRatings(project.id);
   const addRating = useAddRating();
   const [rating, setRating] = useState(-1);
@@ -41,7 +42,7 @@ export function ProjectCard({ project, isAdmin, userId, onLogin, onDelete }: Pro
         project_id: project.id,
         rating,
         user_id: userId,
-        reviewer_name: "User",
+        reviewer_name: userName || "Anonymous",
         comment: trimmedComment || null,
       });
       setRating(-1); setComment(""); setShowForm(false);
