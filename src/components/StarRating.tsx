@@ -24,15 +24,15 @@ export function StarRating({ value, onChange, readonly = false, size = 20 }: Sta
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="flex gap-1">
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-1">
         {Array.from({ length: 11 }, (_, i) => i).map((n) => (
           <button
             key={n}
             type="button"
             onClick={() => onChange?.(n)}
             className={cn(
-              "w-7 h-7 rounded text-xs font-bold transition-all duration-150",
+              "w-8 h-8 rounded text-xs font-bold transition-all duration-150",
               value === n
                 ? "bg-primary text-primary-foreground scale-110"
                 : "bg-secondary text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -42,7 +42,7 @@ export function StarRating({ value, onChange, readonly = false, size = 20 }: Sta
           </button>
         ))}
       </div>
-      {value > 0 && (
+      {value >= 0 && (
         <span className={cn("text-sm font-medium", getGradeLabel(value).color)}>
           {getGradeLabel(value).label}
         </span>
